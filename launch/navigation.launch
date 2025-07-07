@@ -1,0 +1,53 @@
+<launch>
+    <!-- Gazebo Simulation -->
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos" default="-2.0"/>
+  <arg name="y_pos" default="0.0"/>
+  <arg name="z_pos" default="0.0"/>
+
+  <!-- Use empty world instead of turtlebot3_world for better compatibility -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- Robot Description -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <!-- Spawn Robot -->
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" 
+        args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+
+  <!-- Robot State Publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node>
+    
+    <!-- Map Server -->
+    <arg name="map_file" default="$(find assignment_turtlebot3)/maps/map.yaml"/>
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+    
+    <!-- Wait a bit for Gazebo to fully load -->
+    <arg name="launch_delay" default="3.0"/>
+    
+    <!-- AMCL -->
+    <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
+        <arg name="initial_pose_x" value="$(arg x_pos)"/>
+        <arg name="initial_pose_y" value="$(arg y_pos)"/>
+        <arg name="initial_pose_a" value="0.0"/>
+    </include >
+    
+    <!-- Main Navigation Node (coordinates path planning and execution) -->
+    <node pkg="assignment_turtlebot3" type="navigator.py" name="navigator" output="screen" launch-prefix="bash -c 'sleep 5; $0 $@' "/>
+    
+    <!-- RViz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find assignment_turtlebot3)/rviz/config.rviz">
+        <param name="initial_pose_x" value="$(arg x_pos)"/>
+        <param name="initial_pose_y" value="$(arg y_pos)"/>
+        <param name="initial_pose_a" value="0.0"/>
+    </node>
+</launch>
