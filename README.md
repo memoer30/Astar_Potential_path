@@ -34,16 +34,20 @@ Make sure you have the following ROS1 packages installed (tested on **ROS Noetic
 - `turtlebot3_gazebo`
 - `turtlebot3_navigation` *(optional, only for model support)*
 
-Install missing dependencies with:
 
 ```bash
-rosdep install --from-paths src --ignore-src -r -y
+
 
 cd ~/catkin_ws
 catkin_make
 source devel/setup.bash
+```
 
+
+```bash
 roslaunch assignment_turtlebot3 navigation.launch
+```
+
 
 
 
