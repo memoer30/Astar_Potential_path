@@ -262,16 +262,10 @@ The system provides real-time logging of:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📚 References
-
-- [TurtleBot3 Documentation](https://emanual.robotis.com/docs/en/platform/turtlebot3/)
-- [ROS Navigation Stack](http://wiki.ros.org/navigation)
-- [Artificial Potential Fields for Robot Path Planning](https://ieeexplore.ieee.org/document/1087247)
-- [A* Search Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
 
 ## 👥 Authors
 
-- **MEHMET ER* - *Initial work* - [YourGitHub](https://github.com/memoer30/Astar_Potential_path/)
+- **MEHMET ER* - (https://github.com/memoer30/Astar_Potential_path/)
 
 ## 🙏 Acknowledgments
 
